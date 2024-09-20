@@ -1,0 +1,10 @@
+{
+    "@@locale": "tr",
+    "welcomeHeader": "merhaba! seni görmekten çok heyecanlıyız! devam etmek için Spotify ile giriş yapabilir veya kaydolabilirsin",
+    "loginButton": "Spotify ile giriş yap",
+    "signupButton": "Spotify ile kayıt ol",
+    "submitButton": "göndermek istiyorum",
+    "cancelButton": "iptal",
+    "deleteButton": "sil"
+  }
+  

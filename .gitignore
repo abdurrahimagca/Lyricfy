@@ -45,4 +45,4 @@ app.*.map.json
 #customs
 secret
 .env
-dummies
+dummy

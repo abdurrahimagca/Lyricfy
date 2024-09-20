@@ -1,0 +1,10 @@
+{
+    "@@locale": "en",
+    "welcomeHeader": "hello! we are so excited to see you! u may login or sign up with Spotify to continue",
+    "loginButton": "login with Spotify",
+    "signupButton": "sign Up with Spotify",
+    "submitButton": "i wanna submit",
+    "cancelButton": "nope",
+    "deleteButton": "delete"
+  }
+  
