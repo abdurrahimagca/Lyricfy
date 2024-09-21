@@ -20,23 +20,7 @@ Future<void> main() async {
   GetIt getIt = GetIt.I;
   getIt.registerSingleton<SupabaseClient>(initSupa.getClient());  
   runApp(const LyricfyApp());
-  final server = await HttpServer.bind(
-    InternetAddress.loopbackIPv4, // Binds to localhost
-    3000, // Port 3000, or any available port
-  );
-  print('Server listening on port ${server.port}');
-
-  await for (HttpRequest request in server) {
-    if (request.uri.path == '/callback') {
-      request.response
-        ..write('OAuth callback received')
-        ..close();
-    } else {
-      request.response
-        ..write('Hello from the server')
-        ..close();
-    }
-  }
+  
 }
 
 class LyricfyApp extends StatelessWidget {
