@@ -1,42 +1,52 @@
+import 'package:lyricfy/constants/errors.dart';
 import 'package:supabase_flutter/supabase_flutter.dart' as s;
 
 class SupaAuth {
   final s.SupabaseClient _client;
   SupaAuth(this._client);
 
-    Future<bool> signInOrSignUpWithSpotify() async {
-    await _client.auth.signInWithOAuth(s.OAuthProvider.spotify );
-    var usr = _client.auth.currentUser;
-    if(usr == null){
-      throw Exception('erst01err01: ERR_AUTH_COULDNT_CONNECT_TO_SPOTIFY');
+  Future<int> signInOrSignUpWithSpotify() async {
+    if(!await _client.auth.signInWithOAuth(s.OAuthProvider.spotify)){
+         return CustomErrors.AUTH_COULDNT_CONNECT_AUTH_PROVIDER;
     }
-    if(await isUserAlsoExistsInDB(usr.id)){
-      return true;
+    if(_client.auth.currentUser != null){
+      return CustomErrors.NO_ERR;
     }
-    final un = usr.userMetadata?['username'];
-    if (un == null) {
-      throw Exception('erst01err02: ERR_AUTH_COULDNT_CONNECT_TO_SPOTIFY');
-    }   
-    return createUserIfNotExists(usr.id, un);
+    return CustomErrors.AUTH_NO_USER_AFTER_OAuth;
+  
  }
-  Future<bool> isUserAlsoExistsInDB(String id) async {
-    var user = await _client.from('Users').select().eq('id', id).maybeSingle();
-    return user != null;
+
+  Future<int> isUserAlsoExistsInDB() async {
+    String uid;
+    try{
+        uid = _client.auth.currentUser!.id;
+    }catch(e){
+      return CustomErrors.DB_CANNOT_ATTEMPT_INSERT_NO_AUTH;
+    }
+    var user = await _client.from('users').select().eq('id', uid).maybeSingle();
+    if(user != null){
+      return CustomErrors.DB_MUX_USER_EXISTS;
+    }
+    return CustomErrors.DB_MUX_USER_DOES_NOT_EXIST;
   }
 
-  Future<bool>createUserIfNotExists(String id,String un) async{
+  Future<int>createUserIfNotExists(String n) async{
     var u = _client.auth.currentUser;
     if(u == null){
-      throw Exception('erst01err02: ERR_AUTH_NO_USR');
-    }
-    
-    final insertRes = await _client
-    .from('Users')
-    .insert({'id': id,
-    'username': un})
+      return CustomErrors.DB_CANNOT_ATTEMPT_INSERT_NO_AUTH;
+    } 
+    String? username = u.userMetadata?['username'] ?? n;
+    try {
+      await _client
+    .from('users')
+    .insert({'id': u.id,
+    'username': username})
     .maybeSingle();
-
-    return insertRes != null;
+    } catch (e) {
+      print(e);
+      return CustomErrors.DB_INSERT_USER_DID_NOT_WORKED;
+    }
+    return CustomErrors.NO_ERR;
 
   }
 
