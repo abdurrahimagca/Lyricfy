@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 
-class OkTypeButton extends StatelessWidget {
+class CustomOnPressButton extends StatelessWidget {
   final VoidCallback onPressed;
   final String text;
-  const OkTypeButton({super.key, required this.onPressed, required this.text});
+  const CustomOnPressButton({super.key, required this.onPressed, required this.text});
   @override
   Widget build(BuildContext context) {
     return ElevatedButton(

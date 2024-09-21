@@ -1,9 +1,7 @@
-import 'dart:io';
-
 import 'package:flutter/material.dart';
 import 'package:get_it/get_it.dart';
 import 'package:lyricfy/generated/l10n.dart';
-import 'package:lyricfy/src/faces/auth/login_screen.dart';
+import 'package:lyricfy/src/faces/auth/auth_flow_start_screen.dart';
 import 'package:lyricfy/src/internal/supa/init_supa.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';

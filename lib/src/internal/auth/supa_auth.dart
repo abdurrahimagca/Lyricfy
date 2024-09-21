@@ -15,6 +15,12 @@ class SupaAuth {
     return CustomErrors.AUTH_NO_USER_AFTER_OAuth;
   
  }
+ Future<bool> isUserNameAvailable(String prename)async{
+    if(await _client.from('users').select().eq('username', prename).maybeSingle() == null){
+      return true;
+    }
+    return false;
+ }
 
   Future<int> isUserAlsoExistsInDB() async {
     String uid;
