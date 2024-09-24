@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_svg/svg.dart';
 import 'package:get_it/get_it.dart';
 import 'package:lyricfy/constants/errors.dart';
 import 'package:lyricfy/generated/l10n.dart';
@@ -52,9 +53,13 @@ class LoginScreen extends StatelessWidget {
     final loginButtonWidget = CustomOnPressButton(
         onPressed: () => _handleLoginStates(context),
         text: S.of(context).loginButton);
+    DesignConsts designConsts = GetIt.I<DesignConsts>();
     List<String> posterText = [
-      "merhaba",
       "hello",
+      "merhaba",
+      "Ողջույն",
+      "Γειά σου",
+      "salam",
       "hola",
       "bonjour",
       "ciao",
@@ -79,7 +84,7 @@ class LoginScreen extends StatelessWidget {
         child: Stack(
           children: [
             Positioned(
-              top: 500,
+              top: designConsts.authScreensPosterTextTopPosition,
               left: 0,
               right: 0,
               child: Column(
@@ -88,7 +93,12 @@ class LoginScreen extends StatelessWidget {
               ),
             ),
             Positioned(
-              bottom: DesignConsts.buttomButtonPosition,
+                top: designConsts.authScreensIconTopPosition,
+                left: designConsts.authScreensIconLeftPosition,
+                right: 0,
+                child: SvgPicture.asset('assets/icon-svg/icon.svg')),
+            Positioned(
+              bottom: designConsts.loginButtonBottomPosition,
               left: 0,
               right: 0,
               child: Column(
