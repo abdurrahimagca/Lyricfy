@@ -20,17 +20,28 @@ typedef String MessageIfAbsent(String messageStr, List<dynamic> args);
 class MessageLookup extends MessageLookupByLibrary {
   String get localeName => 'tr';
 
+  static String m0(err_code) =>
+      "bir hata oluştu ${err_code} lutfen hatayı bize bildirin";
+
   final messages = _notInlinedMessages(_notInlinedMessages);
   static Map<String, Function> _notInlinedMessages(_) => <String, Function>{
         "cancelButton": MessageLookupByLibrary.simpleMessage("iptal"),
         "deleteButton": MessageLookupByLibrary.simpleMessage("sil"),
+        "emptyFieldErr": MessageLookupByLibrary.simpleMessage(
+            "eyvah! eksik veya hatalı alanlar var"),
+        "errnotnil": m0,
+        "isAccountPublicLabel":
+            MessageLookupByLibrary.simpleMessage("hesabımı gizlemek istiyorum"),
         "loginButton":
-            MessageLookupByLibrary.simpleMessage("Spotify ile giriş yap"),
-        "signupButton":
-            MessageLookupByLibrary.simpleMessage("Spotify ile kayıt ol"),
-        "submitButton":
-            MessageLookupByLibrary.simpleMessage("göndermek istiyorum"),
-        "welcomeHeader": MessageLookupByLibrary.simpleMessage(
-            "merhaba! seni görmekten çok heyecanlıyız! devam etmek için Spotify ile giriş yapabilir veya kaydolabilirsin")
+            MessageLookupByLibrary.simpleMessage("Spotify ile devam et"),
+        "nameLabel": MessageLookupByLibrary.simpleMessage("isim"),
+        "submitButton": MessageLookupByLibrary.simpleMessage("gönder"),
+        "userAlreadyExistsErr": MessageLookupByLibrary.simpleMessage(
+            "bu kullanıcı zaten var, siz misiniz?"),
+        "userCouldNotBeCreated": MessageLookupByLibrary.simpleMessage(
+            "hesap oluşturulamadı :( , tekrar deneyin"),
+        "userCreated": MessageLookupByLibrary.simpleMessage(
+            "hesabını oluşturduk :)!! hoşgeldin"),
+        "usernameLabel": MessageLookupByLibrary.simpleMessage("kullanıcı adı")
       };
 }

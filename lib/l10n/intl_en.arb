@@ -1,10 +1,16 @@
 {
-    "@@locale": "en",
-    "welcomeHeader": "hello! we are so excited to see you! u may login or sign up with Spotify to continue",
-    "loginButton": "login with Spotify",
-    "signupButton": "sign Up with Spotify",
-    "submitButton": "i wanna submit",
-    "cancelButton": "nope",
-    "deleteButton": "delete"
-  }
-  
+  "@@locale": "en",
+  "loginButton": "continue with Spotify",
+  "submitButton": "submit",
+  "cancelButton": "cancel",
+  "deleteButton": "delete",
+  "emptyFieldErr": "oops! There are missing or incorrect fields",
+  "userAlreadyExistsErr": "This user already exists, is it you?",
+  "userCreated": "we have created your account :)!! Welcome",
+  "userCouldNotBeCreated": "account could not be created :( , please try again",
+  "errnotnil": "an error occurred {err_code}, please report the error to us",
+  "usernameLabel": "username",
+  "nameLabel": "name",
+  "isAccountPublicLabel": "i wanna hide my account"
+}
+

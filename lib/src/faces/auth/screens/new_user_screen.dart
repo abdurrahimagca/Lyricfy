@@ -1,11 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:get_it/get_it.dart';
 import 'package:lyricfy/constants/errors.dart';
+import 'package:lyricfy/generated/l10n.dart';
 import 'package:lyricfy/src/faces/auth/widgets/new_user_widgets.dart';
 import 'package:lyricfy/src/faces/public/popups/fail_type_popup.dart';
 import 'package:lyricfy/src/faces/public/popups/ok_type_popup.dart';
 import 'package:lyricfy/src/faces/public/popups/question_type_popup.dart';
 import 'package:lyricfy/src/faces/public/buttons/general_checkbox.dart';
+import 'package:lyricfy/src/faces/styles/public/text.dart';
 import 'package:lyricfy/src/internal/auth/supa_auth.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 
@@ -33,7 +35,7 @@ class _NewUserScreenState extends State<NewUserScreen> {
   void _onFinish(context) async {
     if (_nameInputController.text.isEmpty ||
         _userNameInputController.text.isEmpty) {
-      failPopBuilder(context, "HATA", "Boş veya yanlış alan");
+      failPopBuilder(context, "Error", S.of(context).emptyFieldErr);
       return;
     }
 
@@ -49,9 +51,9 @@ class _NewUserScreenState extends State<NewUserScreen> {
 
       var cu = await sa.createUserIfNotExists(username, name, b ?? false);
       if (cu == CustomErrors.NO_ERR) {
-        okPopBuilder(context, "Başarılı", "Kullanıcı oluşturuldu.");
+        okPopBuilder(context, "Success", S.of(context).userCreated);
       } else {
-        failPopBuilder(context, "HATA", "Kullanıcı oluşturulamadı.");
+        failPopBuilder(context, "HATA", S.of(context).userCouldNotBeCreated);
       }
     }
   }
@@ -76,7 +78,10 @@ class _NewUserScreenState extends State<NewUserScreen> {
       _userNameInputController,
       _nameInputController
     ];
-    List<String> labels = ["Kullanıcı Adı", "Ad"];
+    List<String> labels = [
+      S.of(context).usernameLabel,
+      S.of(context).nameLabel
+    ];
 
     return Scaffold(
       body: PageView(
@@ -98,7 +103,16 @@ class _NewUserScreenState extends State<NewUserScreen> {
           ),
           // Third page - Checkbox
           Center(
-            child: GeneralCheckbox(),
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                Text(
+                  S.of(context).isAccountPublicLabel,
+                  style: PublicTextStyles.uiText,
+                ),
+                const GeneralCheckbox(),
+              ],
+            ),
           ),
         ],
       ),

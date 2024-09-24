@@ -50,50 +50,30 @@ class S {
     return Localizations.of<S>(context, S);
   }
 
-  /// `hello! we are so excited to see you! u may login or sign up with Spotify to continue`
-  String get welcomeHeader {
-    return Intl.message(
-      'hello! we are so excited to see you! u may login or sign up with Spotify to continue',
-      name: 'welcomeHeader',
-      desc: '',
-      args: [],
-    );
-  }
-
-  /// `login with Spotify`
+  /// `continue with Spotify`
   String get loginButton {
     return Intl.message(
-      'login with Spotify',
+      'continue with Spotify',
       name: 'loginButton',
       desc: '',
       args: [],
     );
   }
 
-  /// `sign Up with Spotify`
-  String get signupButton {
-    return Intl.message(
-      'sign Up with Spotify',
-      name: 'signupButton',
-      desc: '',
-      args: [],
-    );
-  }
-
-  /// `i wanna submit`
+  /// `submit`
   String get submitButton {
     return Intl.message(
-      'i wanna submit',
+      'submit',
       name: 'submitButton',
       desc: '',
       args: [],
     );
   }
 
-  /// `nope`
+  /// `cancel`
   String get cancelButton {
     return Intl.message(
-      'nope',
+      'cancel',
       name: 'cancelButton',
       desc: '',
       args: [],
@@ -105,6 +85,86 @@ class S {
     return Intl.message(
       'delete',
       name: 'deleteButton',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `oops! There are missing or incorrect fields`
+  String get emptyFieldErr {
+    return Intl.message(
+      'oops! There are missing or incorrect fields',
+      name: 'emptyFieldErr',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `This user already exists, is it you?`
+  String get userAlreadyExistsErr {
+    return Intl.message(
+      'This user already exists, is it you?',
+      name: 'userAlreadyExistsErr',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `we have created your account :)!! Welcome`
+  String get userCreated {
+    return Intl.message(
+      'we have created your account :)!! Welcome',
+      name: 'userCreated',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `account could not be created :( , please try again`
+  String get userCouldNotBeCreated {
+    return Intl.message(
+      'account could not be created :( , please try again',
+      name: 'userCouldNotBeCreated',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `an error occurred {err_code}, please report the error to us`
+  String errnotnil(Object err_code) {
+    return Intl.message(
+      'an error occurred $err_code, please report the error to us',
+      name: 'errnotnil',
+      desc: '',
+      args: [err_code],
+    );
+  }
+
+  /// `username`
+  String get usernameLabel {
+    return Intl.message(
+      'username',
+      name: 'usernameLabel',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `name`
+  String get nameLabel {
+    return Intl.message(
+      'name',
+      name: 'nameLabel',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `i wanna hide my account`
+  String get isAccountPublicLabel {
+    return Intl.message(
+      'i wanna hide my account',
+      name: 'isAccountPublicLabel',
       desc: '',
       args: [],
     );

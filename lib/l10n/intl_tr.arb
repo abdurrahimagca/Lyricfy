@@ -1,10 +1,21 @@
-{
+
+   {
     "@@locale": "tr",
-    "welcomeHeader": "merhaba! seni görmekten çok heyecanlıyız! devam etmek için Spotify ile giriş yapabilir veya kaydolabilirsin",
-    "loginButton": "Spotify ile giriş yap",
-    "signupButton": "Spotify ile kayıt ol",
-    "submitButton": "göndermek istiyorum",
+    "loginButton": "Spotify ile devam et",
+    "submitButton": "gönder",
     "cancelButton": "iptal",
-    "deleteButton": "sil"
+    "deleteButton": "sil",
+    "emptyFieldErr" : "eyvah! eksik veya hatalı alanlar var",
+    "userAlreadyExistsErr" : "bu kullanıcı zaten var, siz misiniz?",
+    "userCreated":"hesabını oluşturduk :)!! hoşgeldin",
+    "userCouldNotBeCreated":"hesap oluşturulamadı :( , tekrar deneyin",
+    "errnotnil":"bir hata oluştu {err_code} lutfen hatayı bize bildirin",
+    "usernameLabel" : "kullanıcı adı",
+    "nameLabel" : "isim",
+    "isAccountPublicLabel" : "hesabımı gizlemek istiyorum"
+
+
+    
+
   }
   

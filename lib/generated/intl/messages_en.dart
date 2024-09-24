@@ -20,16 +20,28 @@ typedef String MessageIfAbsent(String messageStr, List<dynamic> args);
 class MessageLookup extends MessageLookupByLibrary {
   String get localeName => 'en';
 
+  static String m0(err_code) =>
+      "an error occurred ${err_code}, please report the error to us";
+
   final messages = _notInlinedMessages(_notInlinedMessages);
   static Map<String, Function> _notInlinedMessages(_) => <String, Function>{
-        "cancelButton": MessageLookupByLibrary.simpleMessage("nope"),
+        "cancelButton": MessageLookupByLibrary.simpleMessage("cancel"),
         "deleteButton": MessageLookupByLibrary.simpleMessage("delete"),
+        "emptyFieldErr": MessageLookupByLibrary.simpleMessage(
+            "oops! There are missing or incorrect fields"),
+        "errnotnil": m0,
+        "isAccountPublicLabel":
+            MessageLookupByLibrary.simpleMessage("i wanna hide my account"),
         "loginButton":
-            MessageLookupByLibrary.simpleMessage("login with Spotify"),
-        "signupButton":
-            MessageLookupByLibrary.simpleMessage("sign Up with Spotify"),
-        "submitButton": MessageLookupByLibrary.simpleMessage("i wanna submit"),
-        "welcomeHeader": MessageLookupByLibrary.simpleMessage(
-            "hello! we are so excited to see you! u may login or sign up with Spotify to continue")
+            MessageLookupByLibrary.simpleMessage("continue with Spotify"),
+        "nameLabel": MessageLookupByLibrary.simpleMessage("name"),
+        "submitButton": MessageLookupByLibrary.simpleMessage("submit"),
+        "userAlreadyExistsErr": MessageLookupByLibrary.simpleMessage(
+            "This user already exists, is it you?"),
+        "userCouldNotBeCreated": MessageLookupByLibrary.simpleMessage(
+            "account could not be created :( , please try again"),
+        "userCreated": MessageLookupByLibrary.simpleMessage(
+            "we have created your account :)!! Welcome"),
+        "usernameLabel": MessageLookupByLibrary.simpleMessage("username")
       };
 }
