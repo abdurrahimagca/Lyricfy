@@ -36,20 +36,17 @@ class SupaAuth {
     return CustomErrors.DB_MUX_USER_DOES_NOT_EXIST;
   }
 
-  Future<int>createUserIfNotExists(String n) async{
+  Future<int>createUserIfNotExists(String username, String name, bool isNotPublic) async{
     var u = _client.auth.currentUser;
     if(u == null){
       return CustomErrors.DB_CANNOT_ATTEMPT_INSERT_NO_AUTH;
-    } 
-    String? username = u.userMetadata?['username'] ?? n;
+    }
     try {
       await _client
     .from('users')
-    .insert({'id': u.id,
-    'username': username})
+    .insert({'id': u.id,'username': username, 'name' : name, 'isPublic': !isNotPublic})
     .maybeSingle();
     } catch (e) {
-      print(e);
       return CustomErrors.DB_INSERT_USER_DID_NOT_WORKED;
     }
     return CustomErrors.NO_ERR;
