@@ -70,6 +70,8 @@ flutter:
   assets:
     - .env
     - assets/icon-svg/icon.svg
+    - assets/icon-svg/next.svg
+    - assets/icon-svg/back.svg
     - assets/animations/loading.json
 
   # An image asset can refer to one or more resolution-specific "variants", see

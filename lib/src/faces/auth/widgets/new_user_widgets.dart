@@ -1,28 +1,47 @@
 import 'package:flutter/material.dart';
+import 'package:lyricfy/src/faces/styles/public/colors.dart';
+import 'package:lyricfy/src/faces/styles/public/design_consts.dart';
+import 'package:lyricfy/src/faces/styles/public/text.dart';
+import 'package:lyricfy/src/faces/styles/welcome_screen_styles.dart';
 
-//TODO fix this code generatred by an ai DO NOT TRUST
 class NewUserWidgets extends StatelessWidget {
-  final List<TextEditingController> controllers;
-  final List<String> labels;
+  final TextEditingController controller;
+  final String? label;
+  final DesignConsts designConsts;
+  final ValueChanged<String>? onTChanged;
+
   const NewUserWidgets(
-      {super.key, required this.controllers, required this.labels});
+      {super.key,
+      required this.controller,
+      this.label,
+      required this.designConsts,
+      this.onTChanged});
 
   @override
   Widget build(BuildContext context) {
-    assert(controllers.length == labels.length,
-        'Controllers and labels must have the same length');
-    return Column(
-      children: List<Widget>.generate(controllers.length, (int index) {
-        return Padding(
-          padding: const EdgeInsets.symmetric(vertical: 8.0),
+    return Container(
+      width: designConsts.fulScreenFieldWidth,
+      height: designConsts.fullButtonHeight,
+      decoration: ButtonStyles.borderDecoration,
+      child: Container(
+        padding: const EdgeInsets.all(5.0),
+        width: double.infinity,
+        height: double.infinity,
+        decoration: ButtonStyles.buttonWrapperContainerDecoration,
+        child: Center(
           child: TextField(
-            controller: controllers[index],
-            decoration: InputDecoration(
-              labelText: labels[index],
-            ),
-          ),
-        );
-      }),
+              onChanged: onTChanged,
+              style: PublicTextStyles.strongMonoText,
+              cursorColor: PublicColors.nopeButtonColor,
+              controller: controller,
+              decoration: InputDecoration(
+                contentPadding: const EdgeInsets.all(7.0),
+                hintStyle: PublicTextStyles.mostFadedMonoText,
+                hintText: label,
+                border: InputBorder.none,
+              )),
+        ),
+      ),
     );
   }
 }

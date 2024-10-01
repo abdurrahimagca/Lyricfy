@@ -22,4 +22,7 @@ class DesignConsts {
   double get authScreensIconTopPosition => screenHeight * 0.0463;
 
   double get loginButtonBottomPosition => screenHeight * 0.15;
+
+  double get fulScreenFieldWidth => screenWidth * 0.8;
+  double get fulScreenFieldHeight => screenHeight * 0.05; 
 }

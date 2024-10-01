@@ -42,7 +42,7 @@ class _PosterTextWidgetState extends State<PosterTextWidget>
     super.initState();
     _overlayAnimationController = AnimationController(
       vsync: this,
-      duration: Duration(seconds: 2),
+      duration: const Duration(seconds: 2),
     )..addStatusListener((status) {
         if (status == AnimationStatus.completed) {
           // Wait for 1 second before starting deletion
@@ -89,7 +89,7 @@ class _PosterTextWidgetState extends State<PosterTextWidget>
           _displayedText =
               _displayedText.substring(0, _displayedText.length - 1);
         });
-        _timer = Timer(Duration(milliseconds: 50), _startTypingAnimation);
+        _timer = Timer(const Duration(milliseconds: 50), _startTypingAnimation);
       } else {
         // Reset for the next word
         _phase = AnimationPhase.typing;

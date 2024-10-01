@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_svg/svg.dart';
 import 'package:get_it/get_it.dart';
 import 'package:lyricfy/constants/errors.dart';
 import 'package:lyricfy/generated/l10n.dart';
@@ -7,11 +8,14 @@ import 'package:lyricfy/src/faces/public/popups/fail_type_popup.dart';
 import 'package:lyricfy/src/faces/public/popups/ok_type_popup.dart';
 import 'package:lyricfy/src/faces/public/popups/question_type_popup.dart';
 import 'package:lyricfy/src/faces/public/buttons/general_checkbox.dart';
+import 'package:lyricfy/src/faces/styles/public/design_consts.dart';
 import 'package:lyricfy/src/faces/styles/public/text.dart';
 import 'package:lyricfy/src/internal/auth/supa_auth.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 
 class NewUserScreen extends StatefulWidget {
+  const NewUserScreen({super.key});
+
   @override
   _NewUserScreenState createState() => _NewUserScreenState();
 }
@@ -58,6 +62,20 @@ class _NewUserScreenState extends State<NewUserScreen> {
     }
   }
 
+  void _back(context) {
+    if (_step > 0) {
+      _pageController.previousPage(
+        duration: const Duration(milliseconds: 400),
+        curve: Curves.easeInOut,
+      );
+      setState(() {
+        _step--;
+      });
+    } else {
+      //
+    }
+  }
+
   void _next(context) {
     if (_step < TOTAL - 1) {
       _pageController.nextPage(
@@ -83,23 +101,25 @@ class _NewUserScreenState extends State<NewUserScreen> {
       S.of(context).nameLabel
     ];
 
+    final designConsts = GetIt.I<DesignConsts>();
+    final w = NewUserWidgets(
+      controller: controllers[_step],
+      label: labels[_step],
+      designConsts: designConsts,
+    );
+
     return Scaffold(
       body: PageView(
         controller: _pageController,
+      
         children: [
           // First page - Input for Username
           Center(
-            child: TextField(
-              controller: _userNameInputController,
-              decoration: InputDecoration(labelText: labels[0]),
-            ),
+            child: w.build(context),
           ),
           // Second page - Input for Name
           Center(
-            child: TextField(
-              controller: _nameInputController,
-              decoration: InputDecoration(labelText: labels[1]),
-            ),
+            child: w.build(context),
           ),
           // Third page - Checkbox
           Center(
@@ -115,10 +135,6 @@ class _NewUserScreenState extends State<NewUserScreen> {
             ),
           ),
         ],
-      ),
-      floatingActionButton: FloatingActionButton(
-        onPressed: () => _next(context),
-        child: const Icon(Icons.arrow_forward),
       ),
     );
   }
