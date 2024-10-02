@@ -4,6 +4,7 @@ import 'package:get_it/get_it.dart';
 import 'package:lyricfy/constants/errors.dart';
 import 'package:lyricfy/generated/l10n.dart';
 import 'package:lyricfy/src/faces/auth/screens/new_user_screen.dart';
+import 'package:lyricfy/src/faces/auth/screens/sign_up_flow_screen.dart';
 import 'package:lyricfy/src/faces/auth/widgets/poster_text_widget.dart';
 import 'package:lyricfy/src/faces/public/buttons/custom_on_press_button.dart';
 import 'package:lyricfy/src/faces/public/popups/fail_type_popup.dart';
@@ -39,8 +40,10 @@ class LoginScreen extends StatelessWidget {
           if (ie == CustomErrors.DB_MUX_USER_EXISTS) {
             okPopBuilder(context, "ok", "ok");
           } else if (ie == CustomErrors.DB_MUX_USER_DOES_NOT_EXIST) {
-            Navigator.push(context,
-                MaterialPageRoute(builder: (context) => NewUserScreen()));
+            Navigator.push(
+                context,
+                MaterialPageRoute(
+                    builder: (context) => const SignUpFlowScreen()));
           } else {
             dev.log("STH_SRSLY_WRONG err:atfssx41");
           }

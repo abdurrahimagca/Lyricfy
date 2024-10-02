@@ -111,7 +111,6 @@ class _NewUserScreenState extends State<NewUserScreen> {
     return Scaffold(
       body: PageView(
         controller: _pageController,
-      
         children: [
           // First page - Input for Username
           Center(
@@ -133,6 +132,25 @@ class _NewUserScreenState extends State<NewUserScreen> {
                 const GeneralCheckbox(),
               ],
             ),
+          ),
+        ],
+      ),
+      floatingActionButton: Row(
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        children: [
+          // Back button
+          if (_step > 0)
+            FloatingActionButton(
+              onPressed: () => _back(context),
+              child: const Icon(Icons.arrow_back),
+            ),
+          const Spacer(),
+          // Next button
+          FloatingActionButton(
+            onPressed: () => _next(context),
+            child: _step == TOTAL - 1
+                ? const Icon(Icons.check)
+                : const Icon(Icons.arrow_forward),
           ),
         ],
       ),
