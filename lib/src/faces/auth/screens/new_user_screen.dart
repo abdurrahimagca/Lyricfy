@@ -1,13 +1,14 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_svg/svg.dart';
 import 'package:get_it/get_it.dart';
 import 'package:lyricfy/constants/errors.dart';
 import 'package:lyricfy/generated/l10n.dart';
 import 'package:lyricfy/src/faces/auth/widgets/new_user_widgets.dart';
+import 'package:lyricfy/src/faces/public/buttons/general_checkbox.dart';
 import 'package:lyricfy/src/faces/public/popups/fail_type_popup.dart';
 import 'package:lyricfy/src/faces/public/popups/ok_type_popup.dart';
 import 'package:lyricfy/src/faces/public/popups/question_type_popup.dart';
-import 'package:lyricfy/src/faces/public/buttons/general_checkbox.dart';
+import 'package:lyricfy/src/faces/public/buttons/custom_svg_button.dart';
+import 'package:lyricfy/src/faces/styles/public/colors.dart';
 import 'package:lyricfy/src/faces/styles/public/design_consts.dart';
 import 'package:lyricfy/src/faces/styles/public/text.dart';
 import 'package:lyricfy/src/internal/auth/supa_auth.dart';
@@ -62,23 +63,21 @@ class _NewUserScreenState extends State<NewUserScreen> {
     }
   }
 
-  void _back(context) {
+  Future<void> _back(context) async {
     if (_step > 0) {
-      _pageController.previousPage(
+      await _pageController.previousPage(
         duration: const Duration(milliseconds: 400),
         curve: Curves.easeInOut,
       );
       setState(() {
         _step--;
       });
-    } else {
-      //
     }
   }
 
-  void _next(context) {
+  Future<void> _next(context) async {
     if (_step < TOTAL - 1) {
-      _pageController.nextPage(
+      await _pageController.nextPage(
         duration: const Duration(milliseconds: 400),
         curve: Curves.easeInOut,
       );
@@ -109,48 +108,107 @@ class _NewUserScreenState extends State<NewUserScreen> {
     );
 
     return Scaffold(
+      backgroundColor: PublicColors.primaryBackgroundColor,
       body: PageView(
         controller: _pageController,
+        onPageChanged: (index) {
+          setState(() {
+            _step = index;
+          });
+        },
         children: [
-          // First page - Input for Username
-          Center(
-            child: w.build(context),
-          ),
-          // Second page - Input for Name
-          Center(
-            child: w.build(context),
-          ),
-          // Third page - Checkbox
-          Center(
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                Text(
-                  S.of(context).isAccountPublicLabel,
-                  style: PublicTextStyles.uiText,
+          Stack(
+            children: [
+              Center(
+                child: w.build(context),
+              ),
+              if (_step > 0)
+                Positioned(
+                  left: 20,
+                  top: designConsts.screenHeight / 2 - 25,
+                  child: CustomSvgButton(
+                    "assets/icon-svg/back.svg",
+                    width: 32.0,
+                    height: 32.0,
+                    onPressed: () => _back(context),
+                  ).buildSvgButton(),
                 ),
-                const GeneralCheckbox(),
-              ],
-            ),
+              Positioned(
+                right: 20,
+                top: designConsts.screenHeight / 2 - 25,
+                child: CustomSvgButton(
+                  "assets/icon-svg/next.svg",
+                  width: 32.0,
+                  height: 32.0,
+                  onPressed: () => _next(context),
+                ).buildSvgButton(),
+              ),
+            ],
           ),
-        ],
-      ),
-      floatingActionButton: Row(
-        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-        children: [
-          // Back button
-          if (_step > 0)
-            FloatingActionButton(
-              onPressed: () => _back(context),
-              child: const Icon(Icons.arrow_back),
-            ),
-          const Spacer(),
-          // Next button
-          FloatingActionButton(
-            onPressed: () => _next(context),
-            child: _step == TOTAL - 1
-                ? const Icon(Icons.check)
-                : const Icon(Icons.arrow_forward),
+          Stack(
+            children: [
+              Center(
+                child: w.build(context),
+              ),
+              if (_step > 0)
+                Positioned(
+                  left: 20,
+                  top: designConsts.screenHeight / 2 - 25,
+                  child: CustomSvgButton(
+                    "assets/icon-svg/back.svg",
+                    width: 32.0,
+                    height: 32.0,
+                    onPressed: () => _back(context),
+                  ).buildSvgButton(),
+                ),
+              Positioned(
+                right: 20,
+                top: designConsts.screenHeight / 2 - 25,
+                child: CustomSvgButton(
+                  "assets/icon-svg/next.svg",
+                  width: 32.0,
+                  height: 32.0,
+                  onPressed: () => _next(context),
+                ).buildSvgButton(),
+              ),
+            ],
+          ),
+          Stack(
+            children: [
+              Center(
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Text(
+                      S.of(context).isAccountPublicLabel,
+                      style: PublicTextStyles.uiText,
+                    ),
+                    const GeneralCheckbox(),
+                  ],
+                ),
+              ),
+              if (_step > 0)
+                Positioned(
+                  left: 20,
+                  top: designConsts.screenHeight / 2 - 25,
+                  child: CustomSvgButton(
+                    "assets/icon-svg/back.svg",
+                    width: 32.0,
+                    height: 32.0,
+                    onPressed: () => _back(context),
+                  ).buildSvgButton(),
+                ),
+              Positioned(
+                right: 20,
+                top: designConsts.screenHeight / 2 - 25,
+                child: CustomSvgButton(
+                  "assets/icon-svg/next.svg",
+                  width: 32.0,
+                  height: 32.0,
+                  onPressed: () => _next(context),
+                ).buildSvgButton(),
+              ),
+            ],
           ),
         ],
       ),
