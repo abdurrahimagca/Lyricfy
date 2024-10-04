@@ -3,7 +3,6 @@ import 'package:flutter_svg/svg.dart';
 import 'package:get_it/get_it.dart';
 import 'package:lyricfy/constants/errors.dart';
 import 'package:lyricfy/generated/l10n.dart';
-import 'package:lyricfy/src/faces/auth/screens/new_user_screen.dart';
 import 'package:lyricfy/src/faces/auth/screens/sign_up_flow_screen.dart';
 import 'package:lyricfy/src/faces/auth/widgets/poster_text_widget.dart';
 import 'package:lyricfy/src/faces/public/buttons/custom_on_press_button.dart';

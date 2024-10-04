@@ -3,9 +3,6 @@ import 'package:flutter_svg/svg.dart';
 import 'package:get_it/get_it.dart';
 import 'package:lyricfy/constants/errors.dart';
 import 'package:lyricfy/generated/l10n.dart';
-import 'package:lyricfy/src/faces/auth/widgets/new_user_widgets.dart';
-import 'package:lyricfy/src/faces/public/buttons/custom_svg_button.dart';
-import 'package:lyricfy/src/faces/public/buttons/general_checkbox.dart';
 import 'package:lyricfy/src/faces/public/popups/fail_type_popup.dart';
 import 'package:lyricfy/src/faces/public/popups/ok_type_popup.dart';
 import 'package:lyricfy/src/faces/public/popups/question_type_popup.dart';
@@ -76,7 +73,7 @@ class _SignUpFlowScreenState extends State<SignUpFlowScreen> {
 
   void _next(context) {
     if (_step < totalField - 1) {
-      _pageController.nextPage(
+      _pageController.animateToPage(_step + 1,
           duration: const Duration(milliseconds: 400), curve: Curves.easeInOut);
       setState(() {
         _step++;
@@ -88,7 +85,7 @@ class _SignUpFlowScreenState extends State<SignUpFlowScreen> {
 
   void _back(context) {
     if (_step > 0) {
-      _pageController.previousPage(
+      _pageController.animateToPage(_step - 1,
           duration: const Duration(milliseconds: 400),
           curve: Curves.easeInOutBack);
       setState(() {
@@ -99,21 +96,12 @@ class _SignUpFlowScreenState extends State<SignUpFlowScreen> {
 
   @override
   Widget build(BuildContext context) {
-    List<TextEditingController> controllers = [
-      _userNameInputController,
-      _nameInputController
-    ];
     List<String> labels = [
       S.of(context).usernameLabel,
       S.of(context).nameLabel
     ];
 
     final designConsts = GetIt.I<DesignConsts>();
-    /*final newUserWidgets = NewUserWidgets(
-      controller: controllers[_step],
-      label: labels[_step],
-      designConsts: designConsts,
-    );*/
     return Scaffold(
         backgroundColor: PublicColors.primaryBackgroundColor,
         body: Stack(
@@ -141,10 +129,10 @@ class _SignUpFlowScreenState extends State<SignUpFlowScreen> {
                           style: PublicTextStyles.strongMonoText,
                           cursorColor: PublicColors.nopeButtonColor,
                           controller: _userNameInputController,
-                          decoration: const InputDecoration(
-                            contentPadding: EdgeInsets.all(7.0),
+                          decoration: InputDecoration(
+                            contentPadding: const EdgeInsets.all(7.0),
                             hintStyle: PublicTextStyles.mostFadedMonoText,
-                            hintText: ("username"),
+                            hintText: labels[0],
                             border: InputBorder.none,
                           )),
                     ),
@@ -165,10 +153,10 @@ class _SignUpFlowScreenState extends State<SignUpFlowScreen> {
                             style: PublicTextStyles.strongMonoText,
                             cursorColor: PublicColors.nopeButtonColor,
                             controller: _nameInputController,
-                            decoration: const InputDecoration(
+                            decoration: InputDecoration(
                               contentPadding: EdgeInsets.all(7.0),
                               hintStyle: PublicTextStyles.mostFadedMonoText,
-                              hintText: "name",
+                              hintText: labels[1],
                               border: InputBorder.none,
                             )),
                       ),
@@ -176,7 +164,14 @@ class _SignUpFlowScreenState extends State<SignUpFlowScreen> {
                   ),
                 ),
                 Center(
-                  child: Text("page3"),
+                  child: Checkbox(
+                    value: isPrivate,
+                    onChanged: (value) {
+                      setState(() {
+                        isPrivate = value ?? false;
+                      });
+                    },
+                  ),
                 ),
               ],
             ),
@@ -189,8 +184,8 @@ class _SignUpFlowScreenState extends State<SignUpFlowScreen> {
                 elevation: 0.0,
                 fillColor: Colors.transparent,
                 child: SizedBox(
-                  width: 64, // Use the provided width
-                  height: 64, // Use the provided height
+                  width: 32, // Use the provided width
+                  height: 32, // Use the provided height
                   child: SvgPicture.asset("assets/icon-svg/back.svg",
                       fit: BoxFit.contain,
                       alignment:
@@ -207,8 +202,8 @@ class _SignUpFlowScreenState extends State<SignUpFlowScreen> {
                 elevation: 0.0,
                 fillColor: Colors.transparent,
                 child: SizedBox(
-                  width: 64, // Use the provided width
-                  height: 64, // Use the provided height
+                  width: 32, // Use the provided width
+                  height: 32, // Use the provided height
                   child: SvgPicture.asset("assets/icon-svg/next.svg",
                       fit: BoxFit.contain,
                       alignment:
