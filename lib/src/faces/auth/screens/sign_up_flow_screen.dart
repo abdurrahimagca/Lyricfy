@@ -6,6 +6,7 @@ import 'package:lyricfy/generated/l10n.dart';
 import 'package:lyricfy/src/faces/public/popups/fail_type_popup.dart';
 import 'package:lyricfy/src/faces/public/popups/ok_type_popup.dart';
 import 'package:lyricfy/src/faces/public/popups/question_type_popup.dart';
+import 'package:lyricfy/src/faces/public/switch.dart';
 import 'package:lyricfy/src/faces/styles/public/colors.dart';
 import 'package:lyricfy/src/faces/styles/public/design_consts.dart';
 import 'package:lyricfy/src/faces/styles/public/text.dart';
@@ -73,11 +74,11 @@ class _SignUpFlowScreenState extends State<SignUpFlowScreen> {
 
   void _next(context) {
     if (_step < totalField - 1) {
-      _pageController.animateToPage(_step + 1,
-          duration: const Duration(milliseconds: 400), curve: Curves.easeInOut);
       setState(() {
         _step++;
       });
+      _pageController.animateToPage(_step,
+          duration: const Duration(milliseconds: 400), curve: Curves.easeInOut);
     } else {
       _onFinish(context);
     }
@@ -85,13 +86,13 @@ class _SignUpFlowScreenState extends State<SignUpFlowScreen> {
 
   void _back(context) {
     if (_step > 0) {
-      _pageController.animateToPage(_step - 1,
-          duration: const Duration(milliseconds: 400),
-          curve: Curves.easeInOutBack);
       setState(() {
         _step--;
       });
     }
+    _pageController.animateToPage(_step,
+        duration: const Duration(milliseconds: 400),
+        curve: Curves.easeInOutBack);
   }
 
   @override
@@ -164,14 +165,11 @@ class _SignUpFlowScreenState extends State<SignUpFlowScreen> {
                   ),
                 ),
                 Center(
-                  child: Checkbox(
-                    value: isPrivate,
-                    onChanged: (value) {
-                      setState(() {
-                        isPrivate = value ?? false;
-                      });
-                    },
-                  ),
+                  child: CustomSwitch(onChanged: (value) {
+                    setState(() {
+                      isPrivate = value;
+                    });
+                  }),
                 ),
               ],
             ),
