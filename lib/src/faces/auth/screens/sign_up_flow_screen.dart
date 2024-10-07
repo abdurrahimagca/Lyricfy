@@ -3,6 +3,7 @@ import 'package:flutter_svg/svg.dart';
 import 'package:get_it/get_it.dart';
 import 'package:lyricfy/constants/errors.dart';
 import 'package:lyricfy/generated/l10n.dart';
+import 'package:lyricfy/src/faces/auth/screens/home_screen.dart';
 import 'package:lyricfy/src/faces/public/popups/fail_type_popup.dart';
 import 'package:lyricfy/src/faces/public/popups/ok_type_popup.dart';
 import 'package:lyricfy/src/faces/public/popups/question_type_popup.dart';
@@ -66,7 +67,10 @@ class _SignUpFlowScreenState extends State<SignUpFlowScreen> {
           await supabaseAuth.createUserIfNotExists(username, name, isPrivate);
       if (cu == CustomErrors.NO_ERR) {
         okPopBuilder(context, "Success", S.of(context).userCreated);
-      
+        Navigator.pushAndRemoveUntil(
+            context, 
+            MaterialPageRoute(builder: (context) => HomeScreen()), 
+            (Route<dynamic> route) => false);
       } else {
         failPopBuilder(context, "HATA", S.of(context).userCouldNotBeCreated);
       }
