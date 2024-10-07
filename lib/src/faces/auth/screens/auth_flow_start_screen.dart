@@ -86,7 +86,7 @@ class LoginScreen extends StatelessWidget {
         child: Stack(
           children: [
             Positioned(
-              top: designConsts.authScreensPosterTextTopPosition,
+              top: designConsts.screenHeight * 0.5,
               left: 0,
               right: 0,
               child: Column(
@@ -95,7 +95,7 @@ class LoginScreen extends StatelessWidget {
               ),
             ),
             Positioned(
-                top: designConsts.authScreensIconTopPosition,
+                top: designConsts.screenHeight * 0.15,
                 left: designConsts.authScreensIconLeftPosition,
                 right: 0,
                 child: SvgPicture.asset('assets/icon-svg/icon.svg')),

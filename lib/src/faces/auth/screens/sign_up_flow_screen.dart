@@ -1,9 +1,11 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_svg/svg.dart';
+import 'dart:async';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:get_it/get_it.dart';
 import 'package:lyricfy/constants/errors.dart';
 import 'package:lyricfy/generated/l10n.dart';
 import 'package:lyricfy/src/faces/auth/screens/home_screen.dart';
+import 'package:lyricfy/src/faces/auth/widgets/poster_text_widget.dart';
 import 'package:lyricfy/src/faces/public/popups/fail_type_popup.dart';
 import 'package:lyricfy/src/faces/public/popups/ok_type_popup.dart';
 import 'package:lyricfy/src/faces/public/popups/question_type_popup.dart';
@@ -23,21 +25,36 @@ class SignUpFlowScreen extends StatefulWidget {
 }
 
 class _SignUpFlowScreenState extends State<SignUpFlowScreen> {
-  PageController _pageController = PageController();
+  final PageController _pageController = PageController();
   DesignConsts designConsts = GetIt.I<DesignConsts>();
   int totalField = 3;
   int _step = 0;
   final TextEditingController _nameInputController = TextEditingController();
   final TextEditingController _userNameInputController =
       TextEditingController();
-  bool isPrivate = false;
+  bool isPrivate = false, isUsernameValid = false, isNextButtonEnabled = false;
   SupabaseClient supabaseClient = GetIt.I<SupabaseClient>();
   late SupaAuth supabaseAuth;
+
+  Timer? _debounce;
 
   @override
   void initState() {
     super.initState();
     supabaseAuth = SupaAuth(supabaseClient);
+    _userNameInputController.addListener(() {
+      _onUsernameChanged(_userNameInputController.text);
+    });
+  }
+
+  void _onUsernameChanged(String username) {
+    if (_debounce?.isActive ?? false) _debounce!.cancel();
+    _debounce = Timer(const Duration(milliseconds: 100), () async {
+      bool isAvaliable = await supabaseAuth.isUserNameAvailable(username);
+      setState(() {
+        isUsernameValid = isAvaliable && username.isNotEmpty;
+      });
+    });
   }
 
   void _onFinish(context) async {
@@ -55,21 +72,15 @@ class _SignUpFlowScreenState extends State<SignUpFlowScreen> {
 
     var username = _userNameInputController.text;
     var name = _nameInputController.text;
-    bool? dummy;
 
     if (await supabaseAuth.isUserNameAvailable(username)) {
-      dummy = await showQuestionPop(context, "Kullanıcı mevcut, siz misiniz?");
-      if (dummy ?? false) {
-        // handle user confirmation if necessary
-      }
-
       var cu =
           await supabaseAuth.createUserIfNotExists(username, name, isPrivate);
       if (cu == CustomErrors.NO_ERR) {
         okPopBuilder(context, "Success", S.of(context).userCreated);
         Navigator.pushAndRemoveUntil(
-            context, 
-            MaterialPageRoute(builder: (context) => HomeScreen()), 
+            context,
+            MaterialPageRoute(builder: (context) => HomeScreen()),
             (Route<dynamic> route) => false);
       } else {
         failPopBuilder(context, "HATA", S.of(context).userCouldNotBeCreated);
@@ -106,13 +117,48 @@ class _SignUpFlowScreenState extends State<SignUpFlowScreen> {
       S.of(context).usernameLabel,
       S.of(context).nameLabel
     ];
+    const contentAlignment = Alignment(0, 0.3);
+    List<String> welcomeText = [
+      "Welcome", // English
+      "Hoş geldiniz", // Turkish
+      "Καλώς ήρθατε", // Greek
+      "Xoş gəldiniz", // Azerbaijani
+      "Bienvenido", // Spanish
+      "Bienvenue", // French
+      "Benvenuto", // Italian
+      "ようこそ", // Japanese
+      "환영합니다", // Korean
+      "欢迎", // Chinese
+      "Bem-vindo", // Portuguese
+      "Добро пожаловать", // Russian
+      "أهلا وسهلا", // Arabic
+      "Chào mừng", // Vietnamese
+      "ยินดีต้อนรับ", // Thai
+      "Bonvenon", // Esperanto
+      "Välkommen", // Swedish
+      "Willkommen", // German
+      "Welkom", // Dutch
+      "Tervetuloa", // Finnish
+      "Velkommen" // Norwegian
+    ];
+    final poster = PosterTextWidget(posterText: welcomeText);
 
     final designConsts = GetIt.I<DesignConsts>();
     return Scaffold(
         backgroundColor: PublicColors.primaryBackgroundColor,
         body: Stack(
           children: [
+            Positioned(
+              top: designConsts.screenHeight * 0.2,
+              left: 0,
+              right: 0,
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [poster],
+              ),
+            ),
             PageView(
+              physics: const NeverScrollableScrollPhysics(),
               controller: _pageController,
               onPageChanged: (index) {
                 setState(() {
@@ -120,31 +166,50 @@ class _SignUpFlowScreenState extends State<SignUpFlowScreen> {
                 });
               },
               children: [
-                Center(
-                    child: Container(
-                  width: designConsts.fulScreenFieldWidth,
-                  height: designConsts.fullButtonHeight,
-                  decoration: ButtonStyles.borderDecoration,
+                Align(
+                  alignment: contentAlignment,
                   child: Container(
-                    padding: const EdgeInsets.all(5.0),
-                    width: double.infinity,
-                    height: double.infinity,
-                    decoration: ButtonStyles.buttonWrapperContainerDecoration,
-                    child: Center(
-                      child: TextField(
-                          style: PublicTextStyles.strongMonoText,
-                          cursorColor: PublicColors.nopeButtonColor,
-                          controller: _userNameInputController,
-                          decoration: InputDecoration(
-                            contentPadding: const EdgeInsets.all(7.0),
-                            hintStyle: PublicTextStyles.mostFadedMonoText,
-                            hintText: labels[0],
-                            border: InputBorder.none,
-                          )),
+                    width: designConsts.fulScreenFieldWidth,
+                    height: designConsts.fullButtonHeight,
+                    decoration: ButtonStyles.borderDecoration,
+                    child: Container(
+                      padding: const EdgeInsets.all(5.0),
+                      width: double.infinity,
+                      height: double.infinity,
+                      decoration: ButtonStyles.buttonWrapperContainerDecoration,
+                      child: Stack(
+                        children: [
+                          // TextField'i Stack içinde tutuyoruz
+                          TextField(
+                            style: PublicTextStyles.strongMonoText,
+                            cursorColor: PublicColors.nopeButtonColor,
+                            controller: _userNameInputController,
+                            decoration: InputDecoration(
+                              contentPadding: const EdgeInsets.all(7.0),
+                              hintStyle: PublicTextStyles.mostFadedMonoText,
+                              hintText: labels[0],
+                              border: InputBorder.none,
+                            ),
+                          ),
+
+                          Positioned(
+                            right: 0,
+                            bottom: 0,
+                            child: isUsernameValid
+                                ? const FaIcon(FontAwesomeIcons.check,
+                                    color: PublicColors.yupButtonColor)
+                                : const FaIcon(
+                                    FontAwesomeIcons.xmark,
+                                    color: PublicColors.nopeButtonColor,
+                                  ),
+                          ),
+                        ],
+                      ),
                     ),
                   ),
-                )),
-                Center(
+                ),
+                Align(
+                  alignment: contentAlignment,
                   child: Container(
                     width: designConsts.fulScreenFieldWidth,
                     height: designConsts.fullButtonHeight,
@@ -169,7 +234,8 @@ class _SignUpFlowScreenState extends State<SignUpFlowScreen> {
                     ),
                   ),
                 ),
-                Center(
+                Align(
+                  alignment: contentAlignment,
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
@@ -190,39 +256,27 @@ class _SignUpFlowScreenState extends State<SignUpFlowScreen> {
               ],
             ),
             Positioned(
-              left: 0,
-              top: designConsts.screenHeight / 2 - 25,
-              child: RawMaterialButton(
+              top: designConsts.screenHeight * 0.6,
+              left: -10,
+              child: IconButton(
                 onPressed: () => _back(context),
-                padding: const EdgeInsets.all(0.0),
-                elevation: 0.0,
-                fillColor: Colors.transparent,
-                child: SizedBox(
-                  width: 32, // Use the provided width
-                  height: 32, // Use the provided height
-                  child: SvgPicture.asset("assets/icon-svg/back.svg",
-                      fit: BoxFit.contain,
-                      alignment:
-                          Alignment.center), // Load SVG using the provided name
+                icon: const FaIcon(
+                  FontAwesomeIcons.caretLeft,
+                  color: PublicColors.nopeButtonColor,
                 ),
+                iconSize: 50, // İkonun boyutunu burada ayarlayabilirsiniz
               ),
             ),
             Positioned(
-              right: 0,
-              top: designConsts.screenHeight / 2 - 25,
-              child: RawMaterialButton(
+              top: designConsts.screenHeight * 0.6,
+              right: -10,
+              child: IconButton(
                 onPressed: () => _next(context),
-                padding: const EdgeInsets.all(0.0),
-                elevation: 0.0,
-                fillColor: Colors.transparent,
-                child: SizedBox(
-                  width: 32, // Use the provided width
-                  height: 32, // Use the provided height
-                  child: SvgPicture.asset("assets/icon-svg/next.svg",
-                      fit: BoxFit.contain,
-                      alignment:
-                          Alignment.center), // Load SVG using the provided name
+                icon: const FaIcon(
+                  FontAwesomeIcons.caretRight,
+                  color: PublicColors.yupButtonColor,
                 ),
+                iconSize: 50,
               ),
             ),
           ],

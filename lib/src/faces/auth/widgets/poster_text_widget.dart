@@ -107,7 +107,7 @@ class _PosterTextWidgetState extends State<PosterTextWidget>
       animation: _overlayAnimationController,
       builder: (context, child) {
         TextStyle textStyle = Poster.posterTextStyle.copyWith(
-          fontSize: 80,
+          fontSize: 50,
           fontWeight: FontWeight.w900,
           foreground: Paint()
             ..style = PaintingStyle.fill
