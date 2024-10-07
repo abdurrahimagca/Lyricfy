@@ -32,8 +32,8 @@ class _CustomSwitchState extends State<CustomSwitch> {
   @override
   Widget build(BuildContext context) {
     DesignConsts designConsts = GetIt.I<DesignConsts>();
-    final width = 40.0;
-    final height = 25.0;
+    final width = 0.09 * designConsts.screenWidth;
+    final height = 0.025 * designConsts.screenHeight;
     return GestureDetector(
       onTap: _toggle,
       child: AnimatedContainer(
@@ -48,11 +48,11 @@ class _CustomSwitchState extends State<CustomSwitch> {
           alignment: Alignment.center,
           children: [
             AnimatedPositioned(
-              duration: Duration(milliseconds: 300),
+              duration: const Duration(milliseconds: 300),
               left: isOn ? width - height : 0,
               right: isOn ? 0 : width - height,
               child: AnimatedContainer(
-                duration: Duration(milliseconds: 300),
+                duration: const Duration(milliseconds: 300),
                 width: height - 5,
                 height: height - 5,
                 decoration: const BoxDecoration(

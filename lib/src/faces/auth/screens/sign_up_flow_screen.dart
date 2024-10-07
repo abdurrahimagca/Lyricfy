@@ -66,6 +66,7 @@ class _SignUpFlowScreenState extends State<SignUpFlowScreen> {
           await supabaseAuth.createUserIfNotExists(username, name, isPrivate);
       if (cu == CustomErrors.NO_ERR) {
         okPopBuilder(context, "Success", S.of(context).userCreated);
+      
       } else {
         failPopBuilder(context, "HATA", S.of(context).userCouldNotBeCreated);
       }
@@ -155,7 +156,7 @@ class _SignUpFlowScreenState extends State<SignUpFlowScreen> {
                             cursorColor: PublicColors.nopeButtonColor,
                             controller: _nameInputController,
                             decoration: InputDecoration(
-                              contentPadding: EdgeInsets.all(7.0),
+                              contentPadding: const EdgeInsets.all(7.0),
                               hintStyle: PublicTextStyles.mostFadedMonoText,
                               hintText: labels[1],
                               border: InputBorder.none,
@@ -165,11 +166,22 @@ class _SignUpFlowScreenState extends State<SignUpFlowScreen> {
                   ),
                 ),
                 Center(
-                  child: CustomSwitch(onChanged: (value) {
-                    setState(() {
-                      isPrivate = value;
-                    });
-                  }),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      Container(
+                        padding: const EdgeInsets.all(10.0),
+                        child: const Text(
+                            style: PublicTextStyles.infoMonoText,
+                            "Make my account private"),
+                      ),
+                      CustomSwitch(onChanged: (value) {
+                        setState(() {
+                          isPrivate = value;
+                        });
+                      }),
+                    ],
+                  ),
                 ),
               ],
             ),
