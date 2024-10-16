@@ -1,18 +1,33 @@
+import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:lyricfy/constants/errors.dart';
 import 'package:supabase_flutter/supabase_flutter.dart' as s;
+import 'dart:developer' as dev;
 
 class SupaAuth {
   final s.SupabaseClient _client;
   SupaAuth(this._client);
 
   Future<int> signInOrSignUpWithSpotify() async {
-    if (!await _client.auth.signInWithOAuth(s.OAuthProvider.spotify)) {
+    if (!await _client.auth.signInWithOAuth(
+      s.OAuthProvider.spotify,
+      scopes:
+          'user-read-email user-read-private user-follow-read user-read-recently-played user-top-read user-library-read playlist-read-private playlist-read-collaborative',
+    )) {
       return CustomErrors.AUTH_COULDNT_CONNECT_AUTH_PROVIDER;
     }
-    if (_client.auth.currentUser != null) {
-      return CustomErrors.NO_ERR;
+    final usr = _client.auth.currentUser;
+    final session = _client.auth.currentSession;
+    if (usr == null || session == null) {
+      return CustomErrors.AUTH_NO_USER_AFTER_OAuth;
     }
-    return CustomErrors.AUTH_NO_USER_AFTER_OAuth;
+    final spotifyToken = session.providerToken;
+    final refreshToken = session.providerRefreshToken;
+    dev.log(spotifyToken ?? "null");
+
+    final storage = new FlutterSecureStorage();
+    await storage.write(key: "spotifyToken", value: spotifyToken);
+    await storage.write(key: "spotifyRefreshToken", value: refreshToken);
+    return CustomErrors.NO_ERR;
   }
 
   Future<bool> isUserNameAvailable(String prename) async {
