@@ -1,3 +1,4 @@
+import 'dart:convert';
 import 'dart:math';
 import 'dart:developer' as dev;
 import 'package:flutter/material.dart';
@@ -17,15 +18,15 @@ class HomeScreen extends StatelessWidget {
     dev.log(session != null ? "true" : "false");
     FlutterSecureStorage storage = new FlutterSecureStorage();
 
-    final token = await storage.read(key: "spotifyRefreshToken");
+    final token = await storage.read(key: "spotifyToken");
 
-    final res = await http.get(
-      Uri.parse(
-          "https://zyvhvgkqnnpqwmyagnzd.supabase.co/functions/v1/spotiDemo"),
-      headers: {
-        'Authorization': 'Bearer ${token.toString()}',
-      },
-    );
+    final res = await http.post(
+        Uri.parse(
+            "https://zyvhvgkqnnpqwmyagnzd.supabase.co/functions/v1/getSpotifyTopAll"),
+        headers: {
+          'Authorization': 'Bearer ${_sc.auth.currentSession?.accessToken}',
+        },
+        body: jsonEncode({'accessToken': token}));
 
     dev.log(res.body);
   }
