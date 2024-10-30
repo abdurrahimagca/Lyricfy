@@ -1,7 +1,6 @@
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:lyricfy/constants/errors.dart';
 import 'package:supabase_flutter/supabase_flutter.dart' as s;
-import 'dart:developer' as dev;
 
 class SupaAuth {
   final s.SupabaseClient _client;
@@ -20,11 +19,14 @@ class SupaAuth {
     if (usr == null || session == null) {
       return CustomErrors.AUTH_NO_USER_AFTER_OAuth;
     }
+    usr.appMetadata.addEntries([
+      MapEntry("spotifyToken", session.providerToken),
+      MapEntry("spotifyRefreshToken", session.providerRefreshToken)
+    ]);
     final spotifyToken = session.providerToken;
     final refreshToken = session.providerRefreshToken;
-    dev.log(spotifyToken ?? "null");
 
-    final storage = new FlutterSecureStorage();
+    const storage = FlutterSecureStorage();
     await storage.write(key: "spotifyToken", value: spotifyToken);
     await storage.write(key: "spotifyRefreshToken", value: refreshToken);
     return CustomErrors.NO_ERR;

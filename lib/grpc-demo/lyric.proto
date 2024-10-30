@@ -1,0 +1,15 @@
+syntax = "proto3";
+
+
+service LyricService {
+  rpc GetLyric(GetLyricRequest) returns (GetLyricResponse);
+}
+
+message GetLyricRequest {
+  string artist = 1;
+  string title = 2;
+}
+
+message GetLyricResponse {
+  string lyric = 1;
+}
