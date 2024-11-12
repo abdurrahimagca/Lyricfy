@@ -1,6 +1,6 @@
 //
 //  Generated code. Do not modify.
-//  source: lyric.proto
+//  source: lyricFetch.proto
 //
 // @dart = 2.12
 

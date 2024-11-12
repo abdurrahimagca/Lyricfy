@@ -5,7 +5,10 @@ import 'package:flutter/material.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:get_it/get_it.dart';
 import 'package:http/http.dart' as http;
-
+import 'package:grpc/grpc.dart' as grpc;
+import 'package:lyricfy/src/internal/services/generated/lyricFetch.pb.dart';
+import 'package:lyricfy/src/internal/services/generated/lyricFetch.pbenum.dart';
+import 'package:lyricfy/src/internal/services/generated/lyricFetch.pbgrpc.dart';
 import 'package:lyricfy/src/faces/auth/screens/auth_flow_start_screen.dart';
 import 'package:lyricfy/src/internal/apis/middles/tokenValidate.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
@@ -27,23 +30,39 @@ class HomeScreen extends StatelessWidget {
       // API isteği
       final token = await storage.read(key: "spotifyToken");
       response = await dio.post(
-        'https://zyvhvgkqnnpqwmyagnzd.supabase.co/functions/v1/getSpotifyFypContent',
-        data: {'accessToken': token}, 
-        options: Options(headers: {
-          'Authorization': 'Bearer $tkn'
-        })// İstek verileri
-      );
-     //dev.log('Response: ${response.data}');
- List<Tops> tops = (response.data as List)
+          'https://zyvhvgkqnnpqwmyagnzd.supabase.co/functions/v1/getSpotifyFypContent',
+          data: {'accessToken': token},
+          options: Options(
+              headers: {'Authorization': 'Bearer $tkn'}) // İstek verileri
+          );
+      dev.log('Response: ${response.data}');
+      tops = (response.data as List)
           .map((e) => Tops.fromJson(e as Map<String, dynamic>))
           .toList();
-      dev.log(tops[0].name + tops[0].artist + tops[0].albumName + tops[1].name + tops[1].artist + tops[1].albumName  + tops[2].name + tops[2].artist + tops[2].albumName + tops[2].image + tops[3].name + tops[3].artist + tops[3].albumName + tops[4].name + tops[4].artist + tops[4].albumName);
     } on DioException catch (e) {
       dev.log('home screen Request failed: ${e.message}');
       return;
     }
-    
-   
+    final channel = grpc.ClientChannel("10.0.2.2",
+        port: 50051,
+        options: const grpc.ChannelOptions(
+            credentials: grpc.ChannelCredentials.insecure()));
+    final stub = lyricFetchServiceClient(channel);
+    List<Future<void>> lyricReq = tops.take(10).map((song) async {
+      // Your async code here
+      try {
+        final response = await stub.getLyric(LyricFetchRequest(
+          title: song.name,
+          artist: song.artist,
+        ));
+        dev.log(
+            '********* ${song.name} Lyric************************\n: ${response.lyrics}');
+      } catch (e) {
+        dev.log('Lyric Request failed: ${e}');
+      }
+    }).toList();
+    await Future.wait(lyricReq);
+    await channel.shutdown();
   }
 
   void _sout(context) async {
@@ -60,14 +79,17 @@ class HomeScreen extends StatelessWidget {
     );
   }
 }
-class Tops{
+
+class Tops {
+  final String isrc;
   final String name;
   final String artist;
   final String albumName;
   final String image;
-  Tops(this.name, this.artist, this.albumName, this.image);
+  Tops(this.name, this.artist, this.albumName, this.image, this.isrc);
   factory Tops.fromJson(Map<dynamic, dynamic> json) {
     return Tops(
+      json['isrc'] as String,
       json['name'] as String,
       json['artist'] as String,
       json['albumName'] as String,

@@ -1,6 +1,6 @@
 //
 //  Generated code. Do not modify.
-//  source: lyric.proto
+//  source: lyricFetch.proto
 //
 // @dart = 2.12
 
@@ -15,29 +15,29 @@ import 'dart:core' as $core;
 
 import 'package:protobuf/protobuf.dart' as $pb;
 
-import 'lyric.pb.dart' as $0;
-import 'lyric.pbjson.dart';
+import 'lyricFetch.pb.dart' as $0;
+import 'lyricFetch.pbjson.dart';
 
-export 'lyric.pb.dart';
+export 'lyricFetch.pb.dart';
 
-abstract class LyricServiceBase extends $pb.GeneratedService {
-  $async.Future<$0.GetLyricResponse> getLyric($pb.ServerContext ctx, $0.GetLyricRequest request);
+abstract class lyricFetchServiceBase extends $pb.GeneratedService {
+  $async.Future<$0.LyricFetchResponse> getLyric($pb.ServerContext ctx, $0.LyricFetchRequest request);
 
   $pb.GeneratedMessage createRequest($core.String methodName) {
     switch (methodName) {
-      case 'GetLyric': return $0.GetLyricRequest();
+      case 'GetLyric': return $0.LyricFetchRequest();
       default: throw $core.ArgumentError('Unknown method: $methodName');
     }
   }
 
   $async.Future<$pb.GeneratedMessage> handleCall($pb.ServerContext ctx, $core.String methodName, $pb.GeneratedMessage request) {
     switch (methodName) {
-      case 'GetLyric': return this.getLyric(ctx, request as $0.GetLyricRequest);
+      case 'GetLyric': return this.getLyric(ctx, request as $0.LyricFetchRequest);
       default: throw $core.ArgumentError('Unknown method: $methodName');
     }
   }
 
-  $core.Map<$core.String, $core.dynamic> get $json => LyricServiceBase$json;
-  $core.Map<$core.String, $core.Map<$core.String, $core.dynamic>> get $messageJson => LyricServiceBase$messageJson;
+  $core.Map<$core.String, $core.dynamic> get $json => lyricFetchServiceBase$json;
+  $core.Map<$core.String, $core.Map<$core.String, $core.dynamic>> get $messageJson => lyricFetchServiceBase$messageJson;
 }
 

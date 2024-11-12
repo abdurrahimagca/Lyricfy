@@ -4,7 +4,6 @@ import 'package:get_it/get_it.dart';
 import 'package:lyricfy/constants/errors.dart';
 import 'package:lyricfy/generated/l10n.dart';
 import 'package:lyricfy/src/faces/auth/screens/home_screen.dart';
-import 'package:lyricfy/src/faces/auth/screens/sign_up_flow_screen.dart';
 import 'package:lyricfy/src/faces/auth/widgets/poster_text_widget.dart';
 import 'package:lyricfy/src/faces/public/buttons/custom_on_press_button.dart';
 import 'package:lyricfy/src/faces/public/popups/fail_type_popup.dart';
@@ -22,35 +21,32 @@ class LoginScreen extends StatelessWidget {
     final a = SupaAuth(sc);
     var mux = await a.signInOrSignUpWithSpotify();
     switch (mux) {
-      case CustomErrors.AUTH_COULDNT_CONNECT_AUTH_PROVIDER:
-        {
-          failPopBuilder(context, "SOMETHING WENT WRONG",
-              "Unfortunatly we couldn't connect to the auth provider");
-          break;
-        }
       case CustomErrors.AUTH_NO_USER_AFTER_OAuth:
         {
           failPopBuilder(context, "SOMETHING WENT WRONG",
               "Unfortunatly we couldn't connect to the auth provider");
           break;
         }
-      case CustomErrors.NO_ERR:
+      case CustomErrors.OK_NEW_USER_CREATED:
         {
-          var ie = await a.isUserAlsoExistsInDB();
-          if (ie == CustomErrors.DB_MUX_USER_EXISTS) {
-            okPopBuilder(context, "ok", "ok");
-            Navigator.push(
-                context, MaterialPageRoute(builder: (context) => HomeScreen()));
-          } else if (ie == CustomErrors.DB_MUX_USER_DOES_NOT_EXIST) {
-            Navigator.push(
-                context,
-                MaterialPageRoute(
-                    builder: (context) => const SignUpFlowScreen()));
-          } else {
-            dev.log("STH_SRSLY_WRONG err:atfssx41");
-          }
+          okPopBuilder(context, "ok", "created");    
+          break; 
         }
-    }
+        case CustomErrors.NO_ERR:
+        {
+          Navigator.push(
+            context,
+            MaterialPageRoute(builder: (context) => HomeScreen()),
+          );
+          break;
+        }
+        case CustomErrors.DB_INSERT_USER_DID_NOT_WORKED:
+        {
+          failPopBuilder(context, "SOMETHING WENT WRONG",
+              "Unfortunatly we couldn't make you a user");
+          break;
+        }
+  }
   }
 
   @override
