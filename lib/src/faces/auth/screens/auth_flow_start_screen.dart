@@ -21,18 +21,13 @@ class LoginScreen extends StatelessWidget {
     final a = SupaAuth(sc);
     var mux = await a.signInOrSignUpWithSpotify();
     switch (mux) {
-      case CustomErrors.AUTH_NO_USER_AFTER_OAuth:
-        {
-          failPopBuilder(context, "SOMETHING WENT WRONG",
-              "Unfortunatly we couldn't connect to the auth provider");
-          break;
-        }
-      case CustomErrors.OK_NEW_USER_CREATED:
+  
+      case CustomErrors.NO_ERR:
         {
           okPopBuilder(context, "ok", "created");    
           break; 
         }
-        case CustomErrors.NO_ERR:
+        case CustomErrors.AUTH_AND_DB_USER_EXISTS:
         {
           Navigator.push(
             context,
@@ -41,6 +36,12 @@ class LoginScreen extends StatelessWidget {
           break;
         }
         case CustomErrors.DB_INSERT_USER_DID_NOT_WORKED:
+        {
+          failPopBuilder(context, "SOMETHING WENT WRONG",
+              "Unfortunatly we couldn't make you a user");
+          break;
+        }
+        default:
         {
           failPopBuilder(context, "SOMETHING WENT WRONG",
               "Unfortunatly we couldn't make you a user");

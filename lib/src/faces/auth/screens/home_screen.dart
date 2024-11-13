@@ -9,7 +9,7 @@ import 'package:grpc/grpc.dart' as grpc;
 import 'package:lyricfy/src/faces/auth/screens/auth_flow_start_screen.dart';
 import 'package:lyricfy/src/internal/apis/middles/tokenValidate.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
-
+import 'package:lyricfy/src/internal/models/spotify_tops.dart';
 class HomeScreen extends StatelessWidget {
   final SupabaseClient _sc = GetIt.I<SupabaseClient>();
 
@@ -22,19 +22,19 @@ class HomeScreen extends StatelessWidget {
 
     final dio = Dio()..interceptors.add(TokenValidateInterceptor());
     Response response;
-    List<Tops> tops = [];
+    List<SpotifyTops> tops = [];
     try {
       // API isteği
       final token = await storage.read(key: "spotifyToken");
       response = await dio.post(
-          'https://zyvhvgkqnnpqwmyagnzd.supabase.co/functions/v1/getSpotifyFypContent',
+          'https://zyvhvgkqnnpqwmyagnzd.supabase.co/functions/v1/getSpotifyTops',
           data: {'accessToken': token},
           options: Options(
               headers: {'Authorization': 'Bearer $tkn'}) // İstek verileri
           );
       dev.log('Response: ${response.data}');
       tops = (response.data as List)
-          .map((e) => Tops.fromJson(e as Map<String, dynamic>))
+          .map((e) => SpotifyTops.fromJson(e as Map<String, dynamic>))
           .toList();
     } on DioException catch (e) {
       dev.log('home screen Request failed: ${e.message}');
@@ -53,24 +53,6 @@ class HomeScreen extends StatelessWidget {
     loadContent();
     return Scaffold(
       body: FloatingActionButton(onPressed: () => _sout(context)),
-    );
-  }
-}
-
-class Tops {
-  final String isrc;
-  final String name;
-  final String artist;
-  final String albumName;
-  final String image;
-  Tops(this.name, this.artist, this.albumName, this.image, this.isrc);
-  factory Tops.fromJson(Map<dynamic, dynamic> json) {
-    return Tops(
-      json['isrc'] as String,
-      json['name'] as String,
-      json['artist'] as String,
-      json['albumName'] as String,
-      json['image'] as String,
     );
   }
 }

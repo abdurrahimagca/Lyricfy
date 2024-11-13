@@ -8,10 +8,6 @@ class SupaAuth {
   SupaAuth(this._client);
 
   Future<int> signInOrSignUpWithSpotify() async {
-    /* check user if exists if not make them exists via spotify pass otherwise*/
-    /*check user if exists in db otherwise pass */
-    /*check both return no err*/
-
     var a = _client.auth;
 
     if (a.currentUser == null || a.currentSession == null) {
@@ -32,6 +28,7 @@ class SupaAuth {
       final spotifyToken = session.providerToken;
       final refreshToken = session.providerRefreshToken;
 
+
       const storage = FlutterSecureStorage();
       await storage.write(key: "spotifyToken", value: spotifyToken);
       await storage.write(key: "spotifyRefreshToken", value: refreshToken);
@@ -41,7 +38,7 @@ class SupaAuth {
 
   Future<int> createUserIfNotExists() async {
     if (await isUserAlsoExistsInDB() == CustomErrors.DB_MUX_USER_EXISTS) {
-      return CustomErrors.NO_ERR;
+      return CustomErrors.AUTH_AND_DB_USER_EXISTS;
     }
     var u = _client.auth.currentUser;
     if (u == null) {
@@ -50,10 +47,10 @@ class SupaAuth {
     dev.log(u.userMetadata.toString());
     try {
       await _client.from('users').insert({
-        'username': u.userMetadata?['sub'],
-        'name': u.userMetadata?['name'],
-        'email': u.userMetadata?['email'],
-        "profile_picture": u.userMetadata?['avatar_url'],
+        "username": u.userMetadata?['sub'],
+        "name": u.userMetadata?['name'],
+        "email": u.userMetadata?['email'],
+        "profile_picture": u.userMetadata?['avatar_url']
       }).maybeSingle();
     } catch (e) {
       return CustomErrors.DB_INSERT_USER_DID_NOT_WORKED;
