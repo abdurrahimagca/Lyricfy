@@ -28,7 +28,6 @@ class SupaAuth {
       final spotifyToken = session.providerToken;
       final refreshToken = session.providerRefreshToken;
 
-
       const storage = FlutterSecureStorage();
       await storage.write(key: "spotifyToken", value: spotifyToken);
       await storage.write(key: "spotifyRefreshToken", value: refreshToken);
@@ -52,9 +51,7 @@ class SupaAuth {
         "email": u.userMetadata?['email'],
         "profile_picture": u.userMetadata?['avatar_url']
       }).maybeSingle();
-    } catch (e) {
-      return CustomErrors.DB_INSERT_USER_DID_NOT_WORKED;
-    }
+    } catch (e) {}
     return CustomErrors.NO_ERR;
   }
 
